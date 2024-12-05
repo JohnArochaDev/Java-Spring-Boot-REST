@@ -3,8 +3,12 @@ package com.example.demo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -15,6 +19,11 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<LoginCredential> loginCredentials;
 
     public Long getId() {
         return this.id;
@@ -38,5 +47,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<LoginCredential> getLoginCredentials() {
+        return this.loginCredentials;
+    }
+
+    public void setLoginCredentials(List<LoginCredential> loginCredentials) {
+        this.loginCredentials = loginCredentials;
     }
 }

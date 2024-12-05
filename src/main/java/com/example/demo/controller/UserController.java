@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUSerById(@PathVariable Long id) {
+    public User getUserById(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
@@ -40,5 +41,10 @@ public class UserController {
     public void deleteUser(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
+    }
+
+    @PostMapping("/{id}")
+    public User createLoginCredential(@RequestBody User user) {
+        return userRepository.save(user);
     }
 }

@@ -24,7 +24,8 @@ public class CustomConfig implements WebMvcConfigurer {
             .allowedOrigins(
                 "chrome-extension://mikigodoelkfkbbdejkipipgndfolffj",  // Your Chrome extension
                 "http://localhost:5173",  // Local frontend URL (React app)
-                "http://localhost:8080"   // Local backend API URL
+                "http://localhost:8080",  // Local backend API URL
+                "http://localhost:3000"   // Postman
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
