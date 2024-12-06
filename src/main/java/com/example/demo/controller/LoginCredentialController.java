@@ -1,68 +1,53 @@
 package com.example.demo.controller;
 
 import com.example.demo.LoginCredential;
-import com.example.demo.User;
-import com.example.demo.repository.LoginCredentialRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.LoginCredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
-import java.util.UUID;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/credentials")
 public class LoginCredentialController {
 
     @Autowired
-    private LoginCredentialRepository loginCredentialRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private LoginCredentialService loginCredentialService;
 
     @GetMapping
-    public List<LoginCredential> getAllLoginCredentials() {
-        return loginCredentialRepository.findAll();
+    public List<LoginCredential> getAllLoginCredentials() throws Exception {
+        return loginCredentialService.getAllLoginCredentials();
     }
 
     @GetMapping("/{id}")
-    public LoginCredential getLoginCredentialById(@PathVariable UUID id) {
-        return loginCredentialRepository.findById(id).orElseThrow(() -> new RuntimeException("Credential not found"));
+    public LoginCredential getLoginCredentialById(@PathVariable UUID id) throws Exception {
+        return loginCredentialService.getLoginCredentialById(id);
     }
 
-    @PostMapping("/{id}")
-    public LoginCredential createLoginCredential(@PathVariable UUID id, @RequestBody LoginCredential loginCredential) {
-        User user = userRepository.findById(id).orElseThrow(() ->  new RuntimeException("User not found"));
-        loginCredential.setUser(user);
-
-        return loginCredentialRepository.save(loginCredential);
+    @PostMapping("/{userId}")
+    public LoginCredential createLoginCredential(@PathVariable UUID userId, @RequestBody LoginCredential loginCredential) throws Exception {
+        return loginCredentialService.createLoginCredential(userId, loginCredential);
     }
 
     @PutMapping("/{id}")
-    public LoginCredential updateLoginCredential(@PathVariable UUID id, @RequestBody Map<String, Object> updates) {
-        LoginCredential loginCredential = loginCredentialRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Credential not found"));
-
+    public LoginCredential updateLoginCredential(@PathVariable UUID id, @RequestBody Map<String, Object> updates) throws Exception {
+        LoginCredential loginCredentialDetails = new LoginCredential();
         if (updates.containsKey("username")) {
-            loginCredential.setUsername((String) updates.get("username"));
+            loginCredentialDetails.setUsername((String) updates.get("username"));
         }
         if (updates.containsKey("password")) {
-            loginCredential.setPassword((String) updates.get("password"));
+            loginCredentialDetails.setPassword((String) updates.get("password"));
         }
         if (updates.containsKey("website")) {
-            loginCredential.setWebsite((String) updates.get("website"));
+            loginCredentialDetails.setWebsite((String) updates.get("website"));
         }
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        loginCredential.setUser(user);
-
-        return loginCredentialRepository.save(loginCredential);
+        return loginCredentialService.updateLoginCredential(id, loginCredentialDetails);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLoginCredential(@PathVariable UUID id) {
-        LoginCredential loginCredential = loginCredentialRepository.findById(id).orElseThrow(() -> new RuntimeException("Credential not found"));
-        loginCredentialRepository.delete(loginCredential);
+    public void deleteLoginCredential(@PathVariable UUID id) throws Exception {
+        loginCredentialService.deleteLoginCredentialById(id);
     }
 }

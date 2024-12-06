@@ -7,8 +7,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -24,7 +26,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<LoginCredential> loginCredentials;
+    private List<LoginCredential> loginCredentials = new ArrayList<>();
 
     public UUID getId() {
         return this.id;
