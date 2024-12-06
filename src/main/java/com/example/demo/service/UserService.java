@@ -4,12 +4,15 @@ import com.example.demo.User;
 import com.example.demo.LoginCredential;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.EncryptionUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -98,5 +101,19 @@ public class UserService {
             credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
             credential.setWebsite(EncryptionUtil.decrypt(credential.getWebsite(), secretKey));
         }
+    }
+
+    public boolean authenticateUser(String email, String password) throws Exception {
+
+        email = EncryptionUtil.encrypt(email, secretKey);
+        password = EncryptionUtil.encrypt(password, secretKey);
+
+        Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return password.equals(user.getPassword());
+        }
+        return false;
     }
 }

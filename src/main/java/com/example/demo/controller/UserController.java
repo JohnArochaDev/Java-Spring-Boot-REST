@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +41,19 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            boolean isAuthenticated = userService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+            if (isAuthenticated) {
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
     }
 }
