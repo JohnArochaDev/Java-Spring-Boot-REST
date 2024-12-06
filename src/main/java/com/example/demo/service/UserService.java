@@ -21,7 +21,7 @@ public class UserService {
         String encodedKey = System.getenv("SECRET_KEY");
 
         if (encodedKey == null) {
-            throw new RuntimeException("SECRET_KEY environment variable not set");
+            throw new RuntimeException("secret environment variable not set");
         }
 
         // Decode the Base64-encoded key
