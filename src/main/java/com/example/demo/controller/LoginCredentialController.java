@@ -7,6 +7,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.UUID;
 
 import java.util.List;
 
@@ -26,12 +27,12 @@ public class LoginCredentialController {
     }
 
     @GetMapping("/{id}")
-    public LoginCredential getLoginCredentialById(@PathVariable Long id) {
+    public LoginCredential getLoginCredentialById(@PathVariable UUID id) {
         return loginCredentialRepository.findById(id).orElseThrow(() -> new RuntimeException("Credential not found"));
     }
 
     @PostMapping("/{id}")
-    public LoginCredential createLoginCredential(@PathVariable Long id, @RequestBody LoginCredential loginCredential) {
+    public LoginCredential createLoginCredential(@PathVariable UUID id, @RequestBody LoginCredential loginCredential) {
         User user = userRepository.findById(id).orElseThrow(() ->  new RuntimeException("User not found"));
         loginCredential.setUser(user);
 
@@ -39,7 +40,7 @@ public class LoginCredentialController {
     }
 
     @PutMapping("/{id}")
-    public LoginCredential updateLoginCredential(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public LoginCredential updateLoginCredential(@PathVariable UUID id, @RequestBody Map<String, Object> updates) {
         LoginCredential loginCredential = loginCredentialRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Credential not found"));
 
@@ -60,7 +61,7 @@ public class LoginCredentialController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLoginCredential(@PathVariable Long id) {
+    public void deleteLoginCredential(@PathVariable UUID id) {
         LoginCredential loginCredential = loginCredentialRepository.findById(id).orElseThrow(() -> new RuntimeException("Credential not found"));
         loginCredentialRepository.delete(loginCredential);
     }
