@@ -30,8 +30,11 @@ public class LoginCredentialController {
         return loginCredentialRepository.findById(id).orElseThrow(() -> new RuntimeException("Credential not found"));
     }
 
-    @PostMapping
-    public LoginCredential createLoginCredential(@RequestBody LoginCredential loginCredential) {
+    @PostMapping("/{id}")
+    public LoginCredential createLoginCredential(@PathVariable Long id, @RequestBody LoginCredential loginCredential) {
+        User user = userRepository.findById(id).orElseThrow(() ->  new RuntimeException("User not found"));
+        loginCredential.setUser(user);
+
         return loginCredentialRepository.save(loginCredential);
     }
 
@@ -49,12 +52,9 @@ public class LoginCredentialController {
         if (updates.containsKey("website")) {
             loginCredential.setWebsite((String) updates.get("website"));
         }
-        if (updates.containsKey("userId")) {
-            Long userId = ((Number) updates.get("userId")).longValue();
-            User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-            loginCredential.setUser(user);
-        }
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        loginCredential.setUser(user);
 
         return loginCredentialRepository.save(loginCredential);
     }
