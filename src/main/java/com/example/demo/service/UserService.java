@@ -29,6 +29,17 @@ public class UserService {
         this.secretKey = EncryptionUtil.getKeyFromString(encodedKey);
     }
 
+    // LOOK INTO HOW TO USE THIS PROPERLY FOR MORE PROTECTION
+
+//    public User getUserById(UUID userId, UUID requestingUserId) throws Exception {
+//        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+//        if (!user.getId().equals(requestingUserId)) {
+//            throw new AccessDeniedException("You do not have permission to access this resource");
+//        }
+//        decryptUser(user);
+//        return user;
+//    }
+
     public List<User> getAllUsers() throws Exception {
         List<User> users = userRepository.findAll();
         for (User user : users) {

@@ -32,6 +32,17 @@ public class LoginCredentialService {
         this.secretKey = EncryptionUtil.getKeyFromString(encodedKey);
     }
 
+    // LOOK INTO HOW TO USE THIS FOR MORE PROTECTION
+
+//    public LoginCredential getLoginCredentialById(UUID credentialId, UUID requestingUserId) throws Exception {
+//        LoginCredential loginCredential = loginCredentialRepository.findById(credentialId).orElseThrow(() -> new RuntimeException("Credential not found"));
+//        if (!loginCredential.getUser().getId().equals(requestingUserId)) {
+//            throw new AccessDeniedException("You do not have permission to access this resource");
+//        }
+//        decryptLoginCredential(loginCredential);
+//        return loginCredential;
+//    }
+
     public List<LoginCredential> getAllLoginCredentials() throws Exception {
         List<LoginCredential> loginCredentials = loginCredentialRepository.findAll();
         for (LoginCredential loginCredential : loginCredentials) {
