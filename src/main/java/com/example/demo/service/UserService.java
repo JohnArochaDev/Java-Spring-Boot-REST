@@ -104,16 +104,34 @@ public class UserService {
     }
 
     public boolean authenticateUser(String email, String password) throws Exception {
+        // Encrypt email and password
+        String encryptedEmail = EncryptionUtil.encrypt(email, secretKey);
+        String encryptedPassword = EncryptionUtil.encrypt(password, secretKey);
 
-        email = EncryptionUtil.encrypt(email, secretKey);
-        password = EncryptionUtil.encrypt(password, secretKey);
+        // Log encrypted email and password
+        System.out.println("Encrypted email: " + encryptedEmail);
+        System.out.println("Encrypted password: " + encryptedPassword);
 
-        Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
+        // Find user by encrypted email
+//        String test = "TMOTxJT0fhjDSdIy4Xo5PA==";
+        Optional<User> userOptional = userRepository.findByEmail(encryptedEmail); // wtf
 
+        System.out.println("This is the object/class" + userOptional);
+
+        // Log the result of the user search
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            return password.equals(user.getPassword());
+            System.out.println("Found user: " + user);
+            System.out.println("User's encrypted password: " + user.getPassword());
+
+            // Compare encrypted passwords
+            boolean passwordsMatch = encryptedPassword.equals(user.getPassword());
+            System.out.println("Passwords match: " + passwordsMatch);
+            return passwordsMatch;
+        } else {
+            System.out.println("User not found with email: " + encryptedEmail);
         }
+
         return false;
     }
 }
