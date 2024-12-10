@@ -1,28 +1,41 @@
 package com.example.demo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.example.demo.roles.Role;
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
+    private String username;
+
     private String password;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> authorities;
+
+    private boolean accountNonExpired = true;
+    private boolean isEnabled = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -52,6 +65,14 @@ public class User {
         this.email = email;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return this.password;
     }
@@ -66,5 +87,34 @@ public class User {
 
     public void setLoginCredentials(List<LoginCredential> loginCredentials) {
         this.loginCredentials = loginCredentials;
+    }
+
+    @Override
+    public Collection<Role> getAuthorities() {
+        return this.authorities;
+    }
+
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isEnabled;
     }
 }
