@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +25,6 @@ public class JwtService {
     private long expiration;
 
     public String generateToken(UserDetails userDetails) {
-        System.out.println("Generating token for username: " + userDetails.getUsername());
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
         claims.put("authorities", userDetails.getAuthorities());
