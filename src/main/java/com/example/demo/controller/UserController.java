@@ -61,7 +61,11 @@ public class UserController {
             if (isAuthenticated) {
                 UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
                 String token = jwtService.generateToken(userDetails);
-                return ResponseEntity.ok(new AuthResponse(token));
+
+                User user = userService.findByEmail(loginRequest.getEmail());
+                String userId = user.getId().toString();
+
+                return ResponseEntity.ok(new AuthResponse(token, userId));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }

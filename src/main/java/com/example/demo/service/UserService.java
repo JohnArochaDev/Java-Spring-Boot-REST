@@ -37,6 +37,12 @@ public class UserService implements UserDetailsService {
         this.secretKey = EncryptionUtil.getKeyFromString(encodedKey);
     }
 
+    public User findByEmail(String email) throws Exception {
+        String encryptedEmail = EncryptionUtil.encrypt(email, secretKey);
+        return userRepository.findByEmail(encryptedEmail)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         String encryptedEmail;
