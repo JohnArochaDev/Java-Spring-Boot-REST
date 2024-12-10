@@ -41,11 +41,6 @@ public class UserController {
     public User getUserById(@PathVariable UUID id) throws Exception {
         return userService.getUserById(id);
     }
-//
-//    @PostMapping
-//    public User createUser(@RequestBody User user) throws Exception {
-//        return userService.createUser(user);
-//    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
