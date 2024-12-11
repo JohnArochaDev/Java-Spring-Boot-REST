@@ -34,7 +34,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
         User createdUser = userService.createUser(user);
         if (createdUser == null) {

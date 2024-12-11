@@ -134,6 +134,7 @@ public class UserService implements UserDetailsService {
         user.setName(EncryptionUtil.decrypt(user.getName(), secretKey));
         user.setEmail(EncryptionUtil.decrypt(user.getEmail(), secretKey));
         user.setPassword(EncryptionUtil.decrypt(user.getPassword(), secretKey));
+        user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
         for (LoginCredential credential : user.getLoginCredentials()) {
             credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
             credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
