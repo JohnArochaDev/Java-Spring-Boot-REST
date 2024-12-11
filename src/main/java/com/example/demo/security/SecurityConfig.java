@@ -38,7 +38,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         "/api/v1/auth/login",
         "/api/v1/auth/register",
         "/users/login",
-//        "/users",
+        "/users/register",
 //        "/users/*",
 //        "/credentials/*"
     };
