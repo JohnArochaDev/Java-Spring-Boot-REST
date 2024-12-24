@@ -35,8 +35,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     // Reduced whitelist for simplicity
     private static final String[] WHITE_LIST_URL = {
-        "/api/v1/auth/login",
-        "/api/v1/auth/register",
         "/users/login",
         "/users/register",
 //        "/users/*",
