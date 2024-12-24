@@ -89,7 +89,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) throws Exception {
-        System.out.println("THIS IS THE PASSED USER" + user.getUsername());
         String checkUserEmail = EncryptionUtil.encrypt(user.getUsername(), secretKey);
         Optional<User> foundUser = userRepository.findByUsername(checkUserEmail);
         if (foundUser.isPresent()) {
@@ -123,7 +122,6 @@ public class UserService implements UserDetailsService {
         user.setName(EncryptionUtil.encrypt(user.getName(), secretKey));
         user.setUsername(EncryptionUtil.encrypt(user.getUsername(), secretKey));
         user.setPassword(EncryptionUtil.encrypt(user.getPassword(), secretKey));
-//        user.setUsername(EncryptionUtil.encrypt(user.getEmail(), secretKey));     REMOVE THIS LATER
         for (LoginCredential credential : user.getLoginCredentials()) {
             credential.setUsername(EncryptionUtil.encrypt(credential.getUsername(), secretKey));
             credential.setPassword(EncryptionUtil.encrypt(credential.getPassword(), secretKey));
@@ -135,7 +133,6 @@ public class UserService implements UserDetailsService {
         user.setName(EncryptionUtil.decrypt(user.getName(), secretKey));
         user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
         user.setPassword(EncryptionUtil.decrypt(user.getPassword(), secretKey));
-//        user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));    REMOVE THIS LATER
         for (LoginCredential credential : user.getLoginCredentials()) {
             credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
             credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
