@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     @EntityGraph(attributePaths = "loginCredentials")
     Optional<User> findById(UUID id);
-    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 }

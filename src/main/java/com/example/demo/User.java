@@ -21,9 +21,6 @@ public class User implements UserDetails {
     private String name;
 
     @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
     private String username;
 
     private String password;
@@ -57,24 +54,17 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return this.username;
+    public String getPassword() {
+        return this.password;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return this.password;
+    @Override
+    public String getUsername() {
+        return this.username;
     }
 
     public void setPassword(String password) {
@@ -92,10 +82,6 @@ public class User implements UserDetails {
     @Override
     public Collection<Role> getAuthorities() {
         return this.authorities;
-    }
-
-    public void setAuthorities(Set<Role> authorities) {
-        this.authorities = authorities;
     }
 
     @Override

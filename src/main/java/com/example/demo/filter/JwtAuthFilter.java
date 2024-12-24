@@ -31,13 +31,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            String userName = jwtService.extractUsername(token);
-            if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            String username = jwtService.extractUsername(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
                     String encodedKey = System.getenv("SECRET_KEY");
                     SecretKey secretKey = EncryptionUtil.getKeyFromString(encodedKey);
-                    String decryptedUserName = EncryptionUtil.decrypt(userName, secretKey);
-                    UserDetails user = userService.loadUserByUsername(decryptedUserName);
+                    String decryptedUsername = EncryptionUtil.decrypt(username, secretKey);
+                    UserDetails user = userService.loadUserByUsername(decryptedUsername);
                     if (jwtService.validateToken(token, user)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             user, null, user.getAuthorities());

@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
 
     public User findByEmail(String email) throws Exception {
         String encryptedEmail = EncryptionUtil.encrypt(email, secretKey);
-        return userRepository.findByEmail(encryptedEmail)
+        return userRepository.findByUsername(encryptedEmail)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        User user = userRepository.findByEmail(encryptedEmail)
+        User user = userRepository.findByUsername(encryptedEmail)
             .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
 
         // Decrypt the stored password
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 
         // Return a UserDetails object with the decrypted password
         return org.springframework.security.core.userdetails.User.builder()
-            .username(user.getEmail())
+            .username(user.getUsername())
             .password(decryptedPassword)
             .authorities(user.getAuthorities())
             .accountExpired(!user.isAccountNonExpired())
@@ -89,8 +89,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) throws Exception {
-        String checkUserEmail = EncryptionUtil.encrypt(user.getEmail(), secretKey);
-        Optional<User> foundUser = userRepository.findByEmail(checkUserEmail);
+        System.out.println("THIS IS THE PASSED USER" + user.getUsername());
+        String checkUserEmail = EncryptionUtil.encrypt(user.getUsername(), secretKey);
+        Optional<User> foundUser = userRepository.findByUsername(checkUserEmail);
         if (foundUser.isPresent()) {
             return null;
         } else {
@@ -104,8 +105,8 @@ public class UserService implements UserDetailsService {
         if (userDetails.getName() != null && !userDetails.getName().isEmpty()) {
             user.setName(EncryptionUtil.encrypt(userDetails.getName(), secretKey));
         }
-        if (userDetails.getEmail() != null && !userDetails.getEmail().isEmpty()) {
-            user.setEmail(EncryptionUtil.encrypt(userDetails.getEmail(), secretKey));
+        if (userDetails.getUsername() != null && !userDetails.getUsername().isEmpty()) {
+            user.setUsername(EncryptionUtil.encrypt(userDetails.getUsername(), secretKey));
         }
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             user.setPassword(EncryptionUtil.encrypt(userDetails.getPassword(), secretKey));
@@ -120,9 +121,9 @@ public class UserService implements UserDetailsService {
 
     private void encryptUser(User user) throws Exception {
         user.setName(EncryptionUtil.encrypt(user.getName(), secretKey));
-        user.setEmail(EncryptionUtil.encrypt(user.getEmail(), secretKey));
+        user.setUsername(EncryptionUtil.encrypt(user.getUsername(), secretKey));
         user.setPassword(EncryptionUtil.encrypt(user.getPassword(), secretKey));
-        user.setUsername(EncryptionUtil.encrypt(user.getEmail(), secretKey));
+//        user.setUsername(EncryptionUtil.encrypt(user.getEmail(), secretKey));     REMOVE THIS LATER
         for (LoginCredential credential : user.getLoginCredentials()) {
             credential.setUsername(EncryptionUtil.encrypt(credential.getUsername(), secretKey));
             credential.setPassword(EncryptionUtil.encrypt(credential.getPassword(), secretKey));
@@ -132,9 +133,9 @@ public class UserService implements UserDetailsService {
 
     private void decryptUser(User user) throws Exception {
         user.setName(EncryptionUtil.decrypt(user.getName(), secretKey));
-        user.setEmail(EncryptionUtil.decrypt(user.getEmail(), secretKey));
-        user.setPassword(EncryptionUtil.decrypt(user.getPassword(), secretKey));
         user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
+        user.setPassword(EncryptionUtil.decrypt(user.getPassword(), secretKey));
+//        user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));    REMOVE THIS LATER
         for (LoginCredential credential : user.getLoginCredentials()) {
             credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
             credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
@@ -147,7 +148,7 @@ public class UserService implements UserDetailsService {
         String encryptedEmail = EncryptionUtil.encrypt(email, secretKey);
         String encryptedPassword = EncryptionUtil.encrypt(password, secretKey);
 
-        Optional<User> userOptional = userRepository.findByEmail(encryptedEmail);
+        Optional<User> userOptional = userRepository.findByUsername(encryptedEmail);
 
         // Log the result of the user search
         if (userOptional.isPresent()) {

@@ -57,12 +57,12 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            boolean isAuthenticated = userService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+            boolean isAuthenticated = userService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
             if (isAuthenticated) {
-                UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
+                UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
                 String token = jwtService.generateToken(userDetails);
 
-                User user = userService.findByEmail(loginRequest.getEmail());
+                User user = userService.findByEmail(loginRequest.getUsername());
                 String userId = user.getId().toString();
 
                 return ResponseEntity.ok(new AuthResponse(token, userId));
