@@ -70,12 +70,29 @@ public class UserService implements UserDetailsService {
             .build();
     }
 
+//    public List<User> getAllUsers() throws Exception {
+//        List<User> users = userRepository.findAll();
+//        for (User user : users) {
+//            decryptUser(user);
+//        }
+//        return users;
+//    }
+
     public List<User> getAllUsers() throws Exception {
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            decryptUser(user);
+            user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
+            decryptLoginCredentials(user);
         }
         return users;
+    }
+
+    private void decryptLoginCredentials(User user) throws Exception {
+        for (LoginCredential credential : user.getLoginCredentials()) {
+            credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
+            credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
+            credential.setWebsite(EncryptionUtil.decrypt(credential.getWebsite(), secretKey));
+        }
     }
 
     public User getUserById(UUID id) throws Exception {
