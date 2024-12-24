@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -23,10 +24,13 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final SecretKey secretKey;
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public UserService(UserRepository userRepository) throws Exception {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) throws Exception {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder; // DIS HURT STUFF
         String encodedKey = System.getenv("SECRET_KEY");
 
         if (encodedKey == null) {
@@ -89,12 +93,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) throws Exception {
-        String checkUserEmail = EncryptionUtil.encrypt(user.getUsername(), secretKey);
-        Optional<User> foundUser = userRepository.findByUsername(checkUserEmail);
+        String hashedUsername = passwordEncoder.encode(user.getUsername());
+        Optional<User> foundUser = userRepository.findByUsername(hashedUsername);
         if (foundUser.isPresent()) {
             return null;
         } else {
-            encryptUser(user);
+            user.setUsername(hashedUsername);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         }
     }
