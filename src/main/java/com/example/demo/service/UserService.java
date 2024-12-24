@@ -58,18 +58,10 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(encryptedEmail)
             .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
 
-        // Decrypt the stored password
-        String decryptedPassword;
-        try {
-            decryptedPassword = EncryptionUtil.decrypt(user.getPassword(), secretKey);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to decrypt password", e);
-        }
-
-        // Return a UserDetails object with the decrypted password
+        // Return a UserDetails object with the hashed password
         return org.springframework.security.core.userdetails.User.builder()
             .username(user.getUsername())
-            .password(decryptedPassword)
+            .password(user.getPassword()) // The password is already hashed
             .authorities(user.getAuthorities())
             .accountExpired(!user.isAccountNonExpired())
             .accountLocked(!user.isAccountNonLocked())
@@ -93,15 +85,14 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) throws Exception {
-        String hashedUsername = passwordEncoder.encode(user.getUsername());
-        Optional<User> foundUser = userRepository.findByUsername(hashedUsername);
-        if (foundUser.isPresent()) {
-            return null;
-        } else {
-            user.setUsername(hashedUsername);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
-        }
+
+        String encryptedEmail = EncryptionUtil.encrypt(user.getUsername(), secretKey);
+
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+
+        user.setUsername(encryptedEmail);
+        user.setPassword(hashedPassword);
+        return userRepository.save(user);
     }
 
     public User updateUser(UUID id, User userDetails) throws Exception {
@@ -148,7 +139,6 @@ public class UserService implements UserDetailsService {
     public boolean authenticateUser(String email, String password) throws Exception {
         // Encrypt email and password
         String encryptedEmail = EncryptionUtil.encrypt(email, secretKey);
-        String encryptedPassword = EncryptionUtil.encrypt(password, secretKey);
 
         Optional<User> userOptional = userRepository.findByUsername(encryptedEmail);
 
@@ -156,7 +146,7 @@ public class UserService implements UserDetailsService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            return encryptedPassword.equals(user.getPassword());
+            return passwordEncoder.matches(password, user.getPassword());
         }
 
         return false;

@@ -58,8 +58,11 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             boolean isAuthenticated = userService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
+            System.out.println("IS THE USER AUTHENTICATED?" + isAuthenticated);
             if (isAuthenticated) {
+                System.out.println("WHAT IS THE LOGIN REQUEST USERNAME?" + loginRequest.getUsername());
                 UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+                System.out.println("IS THE USER DETAILS FOUND?" + userDetails);
                 String token = jwtService.generateToken(userDetails);
 
                 User user = userService.findByEmail(loginRequest.getUsername());
