@@ -35,12 +35,15 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Value("${custom.property}")
     private String customProperty;
 
-    // Reduced whitelist for simplicity
     private static final String[] WHITE_LIST_URL = {
         "/users/login",
         "/users/register",
-//        "/users/*",
-//        "/credentials/*"
+        "/swagger-ui/**",
+        "/api-docs/**",
+        "/v3/api-docs/**",
+        "/swagger-resources/**",
+        "/swagger-ui/**",
+        "/webjars/**"
     };
 
     @Bean
