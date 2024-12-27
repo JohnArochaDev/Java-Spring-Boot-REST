@@ -50,6 +50,9 @@ public class LoginCredentialService {
     public LoginCredential createLoginCredential(UUID userId, LoginCredential loginCredential) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Make the email lower case
+        loginCredential.setWebsite(loginCredential.getWebsite().toLowerCase());
+
         // Encrypt the login credential fields
         encryptLoginCredential(loginCredential);
 
