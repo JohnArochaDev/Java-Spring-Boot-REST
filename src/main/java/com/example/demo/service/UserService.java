@@ -95,7 +95,7 @@ public class UserService implements UserDetailsService {
 
     public User createUser(User user) throws Exception {
 
-        String encryptedEmail = EncryptionUtil.encrypt(user.getUsername(), secretKey);
+        String encryptedEmail = EncryptionUtil.encrypt(user.getUsername().toLowerCase(), secretKey);
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());
 
