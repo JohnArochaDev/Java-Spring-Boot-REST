@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
     info = @Info(
         title = "Password Manager API",
         version = "1.0",
-        description = "API documentation for the Password Manager application. All data will be encrypted in the database and on requests.",
+        description = "API documentation for the Password Manager application. JWT token required for routes. All data will be encrypted in the database and on requests.",
         contact = @Contact(name = "John Arocha", email = "john.arocha@clover.com"),
         license = @License(name = "Apache 2.0", url = "http://springdoc.org")
     ),
