@@ -23,7 +23,7 @@ public class LoginCredentialController {
     @Autowired
     private LoginCredentialService loginCredentialService;
 
-    @Operation(summary = "Get all login credentials", description = "Retrieve a list of all login credentials for development")
+    @Operation(summary = "Get all login credentials", description = "Retrieve a list of all login credentials for development. All data is encrypted as it transfers and in the DB.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved list of login credentials"),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
@@ -33,7 +33,7 @@ public class LoginCredentialController {
         return loginCredentialService.getAllLoginCredentials();
     }
 
-    @Operation(summary = "Get login credential by ID", description = "Retrieve a login credential by its ID")
+    @Operation(summary = "Get login credential by ID", description = "Retrieve a login credential by its ID. All data is encrypted as it transfers and in the DB.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved login credential"),
         @ApiResponse(responseCode = "404", description = "Login credential not found", content = @Content),

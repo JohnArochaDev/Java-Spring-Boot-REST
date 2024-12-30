@@ -31,7 +31,7 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
-    @Operation(summary = "Get all users", description = "Retrieve a list of all users for development")
+    @Operation(summary = "Get all users", description = "Retrieve a list of all users for development. All data is encrypted as it transfers and in the DB.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved list of users"),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
@@ -41,7 +41,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @Operation(summary = "Get user by ID", description = "Retrieve a user by their ID")
+    @Operation(summary = "Get user by ID", description = "Retrieve a user by their ID. All data is encrypted as it transfers and in the DB.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved user"),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
@@ -52,7 +52,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @Operation(summary = "Register a new user", description = "Create a new user account")
+    @Operation(summary = "Register a new user", description = "Create a new user account. If your creating a specific role, do it here.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "User created successfully"),
         @ApiResponse(responseCode = "409", description = "Conflict - User already exists", content = @Content),
@@ -68,7 +68,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Update user details", description = "Update the details of an existing user")
+    @Operation(summary = "Update user details", description = "Update the details of an existing user. This is functional but not in practice on the front end yet.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User updated successfully"),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
@@ -79,7 +79,7 @@ public class UserController {
         return userService.updateUser(id, userDetails);
     }
 
-    @Operation(summary = "Delete user", description = "Delete a user by their ID")
+    @Operation(summary = "Delete user", description = "Delete a user by their ID. This is done automatically on the front end.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "User deleted successfully"),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
@@ -90,7 +90,7 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @Operation(summary = "User login", description = "Authenticate a user and generate a JWT token")
+    @Operation(summary = "User login", description = "Authenticate a user and generate a JWT token. ")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Login successful", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
         @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid email or password", content = @Content),
