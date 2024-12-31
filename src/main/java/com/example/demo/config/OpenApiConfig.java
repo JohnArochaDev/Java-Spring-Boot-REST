@@ -40,7 +40,7 @@ public class OpenApiConfig {
                                    .name("Apache 2.0")
                                    .url("http://springdoc.org")))
             .externalDocs(new ExternalDocumentation()
-                              .description("Password Manager Wiki Documentation")
+                              .description("Password Manager Wiki Documentation (Not yet implemented)")
                               .url("http://example.com/wiki"));
     }
 }
