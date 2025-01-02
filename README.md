@@ -27,13 +27,13 @@ This project is the backend for the SafePass password manager. It provides a sec
 3. Create an `application.properties` file in the `src/main/resources` directory and add your environment variables:
     ```properties
     # Application Name
-    spring.application.name=demo
+    spring.application.name=namehere
 
     # MySQL Configuration
-    spring.datasource.url=jdbc:mysql://localhost:3306/password_manager?useSSL=false&serverTimezone=UTC
+    spring.datasource.url=jdbc:mysql://localhost:3306/{your-db-title-here}?useSSL=false&serverTimezone=UTC
     spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-    spring.datasource.username=root
-    spring.datasource.password=Lindseemywife77!
+    spring.datasource.username=usernamehere
+    spring.datasource.password=passwordhere
     spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
     spring.jpa.hibernate.ddl-auto=update
 
@@ -41,11 +41,8 @@ This project is the backend for the SafePass password manager. It provides a sec
     spring.jpa.show-sql=true
     spring.jpa.properties.hibernate.format_sql=true
 
-    # Custom Property
-    custom.property=Hello, Custom Property!
-
     # Jwt Configuration
-    application.security.jwt.secret-key=GwiAXpEonqqjx8SkVdpurB9DO6pKtQM45G/qPlrjDiA=
+    application.security.jwt.secret-key=yourkeyhere
     application.security.jwt.expiration=3600000
 
     spring.mvc.pathmatch.matching-strategy=ant_path_matcher
