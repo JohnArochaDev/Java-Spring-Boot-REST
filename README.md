@@ -26,13 +26,32 @@ This project is the backend for the SafePass password manager. It provides a sec
 
 3. Create an `application.properties` file in the `src/main/resources` directory and add your environment variables:
     ```properties
-    server.port=8080
-    spring.datasource.url=jdbc:mysql://localhost:3306/safepass
-    spring.datasource.username=your_database_username
-    spring.datasource.password=your_database_password
+    # Application Name
+    spring.application.name=demo
+
+    # MySQL Configuration
+    spring.datasource.url=jdbc:mysql://localhost:3306/password_manager?useSSL=false&serverTimezone=UTC
+    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+    spring.datasource.username=root
+    spring.datasource.password=Lindseemywife77!
+    spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
     spring.jpa.hibernate.ddl-auto=update
-    jwt.secret=your_jwt_secret
-    ```
+
+    # JPA Configuration
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.format_sql=true
+
+    # Custom Property
+    custom.property=Hello, Custom Property!
+
+    # Jwt Configuration
+    application.security.jwt.secret-key=GwiAXpEonqqjx8SkVdpurB9DO6pKtQM45G/qPlrjDiA=
+    application.security.jwt.expiration=3600000
+
+    spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+
+    springdoc.api-docs.path=/api-docs
+    springdoc.swagger-ui.path=/swagger-ui.html
 
 ## Usage
 
@@ -104,21 +123,27 @@ passwordManager
   README.md
 ```
 
-API Endpoints
-Authentication
-POST /users/register: Register a new user.
-POST /users/login: Login a user.
-User Management
-GET /users: Get all users.
-GET /users/{id}: Get user by ID.
-PUT /users/{id}: Update user details.
-DELETE /users/{id}: Delete user.
-Credentials
-GET /credentials: Get all login credentials.
-GET /credentials/{id}: Get login credential by ID.
-POST /credentials/{userId}: Create a new login credential.
-PUT /credentials/{id}: Update login credential.
-DELETE /credentials/{id}: Delete login credential.
+## API Endpoints
+
+### Authentication
+
+- **POST /users/register**: Register a new user.
+- **POST /users/login**: Login a user.
+
+### User Management
+
+- **GET /users**: Get all users.
+- **GET /users/{id}**: Get user by ID.
+- **PUT /users/{id}**: Update user details.
+- **DELETE /users/{id}**: Delete user.
+
+### Credentials
+
+- **GET /credentials**: Get all login credentials.
+- **GET /credentials/{id}**: Get login credential by ID.
+- **POST /credentials/{userId}**: Create a new login credential.
+- **PUT /credentials/{id}**: Update login credential.
+- **DELETE /credentials/{id}**: Delete login credential.
 
 ## Additional Information
 Disclaimer
