@@ -68,6 +68,8 @@ public class LoginCredentialService {
         // Save the user with the updated credentials list
         userRepository.save(user);
 
+        decryptLoginCredential(loginCredential); // decrypts the data before sending the response to front end
+
         return loginCredential;
     }
 
