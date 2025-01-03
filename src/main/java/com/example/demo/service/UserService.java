@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         List<User> users = userRepository.findAll();
         for (User user : users) {
             user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
-//            decryptLoginCredentials(user);
+            decryptLoginCredentials(user);
         }
         return users;
     }
@@ -139,11 +139,11 @@ public class UserService implements UserDetailsService {
         user.setUsername(EncryptionUtil.decrypt(user.getUsername(), secretKey));
         user.setPassword(user.getPassword());
         user.setId(user.getId());
-//        for (LoginCredential credential : user.getLoginCredentials()) {
-//            credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
-//            credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
-//            credential.setWebsite(EncryptionUtil.decrypt(credential.getWebsite(), secretKey));
-//        }
+        for (LoginCredential credential : user.getLoginCredentials()) {
+            credential.setUsername(EncryptionUtil.decrypt(credential.getUsername(), secretKey));
+            credential.setPassword(EncryptionUtil.decrypt(credential.getPassword(), secretKey));
+            credential.setWebsite(EncryptionUtil.decrypt(credential.getWebsite(), secretKey));
+        }
     }
 
     public boolean authenticateUser(String email, String password) throws Exception {
